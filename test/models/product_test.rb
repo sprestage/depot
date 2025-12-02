@@ -81,4 +81,3 @@ class ProductTest < ActiveSupport::TestCase
                  product.errors[:title]
   end
 end
-
