@@ -16,8 +16,9 @@ class ProductsTest < ApplicationSystemTestCase
     click_on "New product"
 
     fill_in "Description", with: @product.description
+    attach_file "Image", Rails.root.join("test/fixtures/files/lorem.jpg")
     fill_in "Price", with: @product.price
-    fill_in "Title", with: @product.title
+    fill_in "Title", with: @title
     click_on "Create Product"
 
     assert_text "Product was successfully created"
@@ -29,8 +30,9 @@ class ProductsTest < ApplicationSystemTestCase
     click_on "Edit this product", match: :first
 
     fill_in "Description", with: @product.description
+    attach_file "Image", Rails.root.join("test/fixtures/files/lorem.jpg")
     fill_in "Price", with: @product.price
-    fill_in "Title", with: @product.title
+    fill_in "Title", with: @title
     click_on "Update Product"
 
     assert_text "Product was successfully updated"
