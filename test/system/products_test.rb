@@ -21,7 +21,8 @@ class ProductsTest < ApplicationSystemTestCase
     fill_in "Title", with: @title
     click_on "Create Product"
 
-    assert_text "Product was successfully created"
+    assert_text "Product was successfully create"
+    assert_text @title  # Wait for product title to appear
     click_on "Back"
   end
 
