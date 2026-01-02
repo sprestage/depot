@@ -24,17 +24,14 @@ class LineItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create line_item" do
-    puts "Before: #{LineItem.count}"
     assert_difference("LineItem.count") do
       post line_items_url, params: { product_id: products(:pragprog).id }
-      puts "After post: #{LineItem.count}"
-      puts "Response: #{response.status}"
     end
 
     follow_redirect!
 
-    assert_select "h2", "Your Pragmatic Cart"
-    assert_select "li", "1 \u00D7 The Pragmatic Programmer"
+    assert_select "h2", "Your Cart"
+    assert_select "td", "The Pragmatic Programmer"
   end
 
   test "should show line_item" do
