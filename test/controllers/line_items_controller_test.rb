@@ -1,3 +1,11 @@
+#---
+# Excerpted from "Agile Web Development with Rails 8",
+# published by The Pragmatic Bookshelf.
+# Copyrights apply to this code. It may not be used to create training material,
+# courses, books, articles, and the like. Contact us if you are in doubt.
+# We make no guarantees that this code is fit for any purpose.
+# Visit https://pragprog.com/titles/rails8 for more book information.
+#---
 require "test_helper"
 
 class LineItemsControllerTest < ActionDispatch::IntegrationTest
@@ -17,10 +25,13 @@ class LineItemsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create line_item" do
     assert_difference("LineItem.count") do
-      post line_items_url, params: { line_item: { cart_id: @line_item.cart_id, product_id: @line_item.product_id } }
+      post line_items_url, params: { product_id: products(:pragprog).id }
     end
 
-    assert_redirected_to line_item_url(LineItem.last)
+    follow_redirect!
+
+    assert_select "h2", "Your Pragmatic Cart"
+    assert_select "li", "The Pragmatic Programmer"
   end
 
   test "should show line_item" do
