@@ -11,3 +11,9 @@ two:
   cart: two
   price: 19.95
   quantity: 2
+
+pragprog:
+  product: pragprog
+  cart: one
+  price: 25.00
+  quantity: 1
