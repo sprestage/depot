@@ -3,7 +3,11 @@
 one:
   product: two
   cart: one
+  price: 19.95
+  quantity: 1
 
 two:
   product: two
   cart: two
+  price: 19.95
+  quantity: 2
