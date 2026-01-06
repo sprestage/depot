@@ -6,6 +6,10 @@ class Product < ApplicationRecord
 
   validates :title, :description, :image, presence: true
   validates :title, uniqueness: true
+  validates :price, numericality: {
+    greater_than_or_equal_to: 0.01,
+    message: "must be at least $0.01"
+  }
   validate :acceptable_image
 
   def acceptable_image
@@ -15,15 +19,13 @@ class Product < ApplicationRecord
       errors.add(:image, "must be a GIF, JPG or PNG image")
     end
   end
-  validates :price, numericality: { greater_than_or_equal_to: 0.01 }
 
   private
 
-  # ensure that there are no line items referencing this product
   def ensure_not_referenced_by_any_line_item
     unless line_items.empty?
-      errors.add(:base, "Line Items present")
-    throw :abort
+      errors.add(:base, "Cannot delete product that is in someone's cart")
+      throw :abort
     end
   end
 end

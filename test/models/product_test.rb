@@ -25,12 +25,12 @@ class ProductTest < ActiveSupport::TestCase
                          filename: "lorem.jpg", content_type: "image/jpeg")
     product.price = -1
     assert product.invalid?
-    assert_equal [ "must be greater than or equal to 0.01" ],
+    assert_equal [ "must be at least $0.01" ],
                  product.errors[:price]
 
     product.price = 0
     assert product.invalid?
-    assert_equal [ "must be greater than or equal to 0.01" ],
+    assert_equal [ "must be at least $0.01" ],
                  product.errors[:price]
 
     product.price = 1
@@ -79,5 +79,27 @@ class ProductTest < ActiveSupport::TestCase
     assert product.invalid?
     assert_equal [ I18n.translate("errors.messages.taken") ],
                  product.errors[:title]
+  end
+
+  test "product cannot be deleted if it has line items" do
+    product = products(:pragprog)
+    # pragprog fixture has line items associated with it
+    assert_not product.destroy
+    assert_not_empty product.errors[:base]
+    assert_equal "Cannot delete product that is in someone's cart", product.errors[:base].first
+  end
+
+  test "product can be deleted if it has no line items" do
+    product = products(:one)
+    product.line_items.destroy_all  # Ensure no line items
+    assert product.destroy
+  end
+
+  test "image must be acceptable type" do
+    product = Product.new(title: "Test", description: "Test", price: 9.99)
+    product.image.attach(io: File.open(Rails.root.join("test/fixtures/files/pomodoro.pdf")),
+                        filename: "pomodoro.pdf", content_type: "application/pdf")
+    assert product.invalid?
+    assert_equal "must be a GIF, JPG or PNG image", product.errors[:image].first
   end
 end
