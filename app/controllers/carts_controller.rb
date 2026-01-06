@@ -1,5 +1,6 @@
 class CartsController < ApplicationController
   before_action :set_cart, only: %i[ show edit update destroy ]
+  before_action :verify_cart_ownership, only: %i[ show edit update destroy ]
   rescue_from ActiveRecord::RecordNotFound, with: :invalid_cart
 
   # GET /carts or /carts.json
@@ -64,6 +65,13 @@ class CartsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_cart
       @cart = Cart.find(params.expect(:id))
+    end
+
+    def verify_cart_ownership
+      unless @cart.id == session[:cart_id]
+        logger.error "Attempt to access cart #{params[:id]} by user with cart #{session[:cart_id]}"
+        redirect_to store_index_url, notice: "You can only access your own cart"
+      end
     end
 
     # Only allow a list of trusted parameters through.
