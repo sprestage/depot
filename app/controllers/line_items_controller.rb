@@ -56,10 +56,11 @@ class LineItemsController < ApplicationController
 
   # DELETE /line_items/1 or /line_items/1.json
   def destroy
+    @cart = @line_item.cart
     @line_item.destroy!
 
     respond_to do |format|
-      format.html { redirect_to line_items_path, notice: "Line item was successfully destroyed.", status: :see_other }
+      format.html { redirect_to @cart, notice: "Item removed from cart.", status: :see_other }
       format.json { head :no_content }
     end
   end
