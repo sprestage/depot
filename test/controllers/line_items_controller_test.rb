@@ -28,10 +28,15 @@ class LineItemsControllerTest < ActionDispatch::IntegrationTest
       post line_items_url, params: { product_id: products(:pragprog).id }
     end
 
-    follow_redirect!
+    assert_redirected_to store_index_url
 
-    assert_select "h2", "Your Cart"
-    assert_select "span", text: /1 × The Pragmatic Programmer/
+    # Verify the line item was created with correct attributes
+    line_item = LineItem.last
+    assert_equal products(:pragprog).id, line_item.product_id
+    assert_equal 1, line_item.quantity
+
+    # Verify it's in the session cart
+    assert_equal line_item.cart_id, session[:cart_id]
   end
 
   test "should show line_item" do

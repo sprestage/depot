@@ -1,10 +1,10 @@
-<li class="mb-2 flex justify-between items-center">
-  <span>
-    <%= line_item.quantity %> &times; <%= line_item.product.title %>
-    <span class="ml-2"><%= number_to_currency(line_item.total_price) %></span>
-  </span>
-  <%= button_to "Delete", line_item,
-    method: :delete,
-    form_class: "inline",
-    class: "ml-4 rounded py-1 px-2 text-white bg-red-600 text-sm" %>
-</li>
+<tr>
+  <td class="text-right"><%= line_item.quantity %></td>
+  <td>&times;</td>
+  <td class="pr-2">
+    <%= line_item.product.title %>
+  </td>
+  <td class="text-right font-bold">
+    <%= number_to_currency(line_item.total_price) %>
+  </td>
+</tr>
