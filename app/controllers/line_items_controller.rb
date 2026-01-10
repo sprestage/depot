@@ -28,6 +28,7 @@ class LineItemsController < ApplicationController
 
     respond_to do |format|
       if @line_item.save
+        format.turbo_stream
         session[:counter] = 0
         format.html { redirect_to store_index_url }
         format.json { render :show,
