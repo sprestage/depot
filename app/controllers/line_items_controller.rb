@@ -56,6 +56,8 @@ class LineItemsController < ApplicationController
   end
 
   def decrement
+    @cart = @line_item.cart
+
     if @line_item.quantity > 1
       @line_item.quantity -= 1
       @line_item.save
@@ -64,18 +66,19 @@ class LineItemsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { redirect_to @line_item.cart, notice: "Item updated." }
+      format.html { redirect_to @cart, notice: "Item updated." }
+      format.turbo_stream
       format.json { head :no_content }
     end
   end
 
-  # DELETE /line_items/1 or /line_items/1.json
   def destroy
     @cart = @line_item.cart
     @line_item.destroy!
 
     respond_to do |format|
       format.html { redirect_to @cart, notice: "Item removed from cart.", status: :see_other }
+      format.turbo_stream
       format.json { head :no_content }
     end
   end
