@@ -57,6 +57,7 @@ class CartsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to store_index_path, status: :see_other,
         notice: "Your cart is currently empty" }
+      format.turbo_stream { flash.now[:notice] = "Your cart is currently empty" }
       format.json { head :no_content }
     end
   end
