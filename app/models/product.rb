@@ -3,6 +3,7 @@ class Product < ApplicationRecord
   before_destroy :ensure_not_referenced_by_any_line_item
   has_one_attached :image
   after_commit -> { broadcast_refresh_later_to "products" }
+  after_commit :broadcast_product_change
 
   validates :title, :description, :image, presence: true
   validates :title, uniqueness: true
@@ -27,5 +28,11 @@ class Product < ApplicationRecord
       errors.add(:base, "Cannot delete product that is in someone's cart")
       throw :abort
     end
+  end
+
+  def broadcast_product_change
+    broadcast_replace_later_to "products",
+      partial: "store/product",
+      locals: { product: self, highlight: true }
   end
 end
